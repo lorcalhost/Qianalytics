@@ -1,4 +1,4 @@
-package com.example.qianalytics;
+package com.lorcalhost.qianalytics;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     if (isFirstTime == true) {
       prefs.setDouble('rate', 7.63);
-      prefs.setString('rateLastUpdatedDateString', getNowDateTime());
+      prefs.setString('rateLastUpdatedDateString', 'Last updated: never');
       Navigator.of(context).pushNamed('/welcome');
     } else {
       updateUserName();
