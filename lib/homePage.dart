@@ -105,10 +105,10 @@ class _MyHomePageState extends State<MyHomePage> {
     double height =
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
 
-    var titleFontSize = height * 0.065;
+    var titleFontSize = width * 0.135;
     var textViewWidth = width * 0.8;
-    var textViewFontSize = height * 0.08;
-    var currentlyFontSize = height * 0.03;
+    var textViewFontSize = width * 0.166;
+    var currentlyFontSize = width * 0.063;
 
     return DefaultTabController(
       length: 2,
@@ -193,173 +193,176 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
 
-                          Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(top: height * 0.1),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(right: width * 0.05),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    // EURO TEXTVIEW
-                                    Container(
-                                      margin: const EdgeInsets.all(5),
-                                      width: textViewWidth,
-                                      child: TextField(
-                                        textAlign: TextAlign.end,
-                                        enableInteractiveSelection: false,
-                                        controller: eurController,
-                                        keyboardType:
-                                            TextInputType.numberWithOptions(
-                                                decimal: true),
-                                        inputFormatters: [
-                                          BlacklistingTextInputFormatter(
-                                            RegExp('[\\-|\\ |\\,]'),
+                          SingleChildScrollView(
+                            child: Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(top: height * 0.1),
+                                ),
+                                Container(
+                                  height: height * 0.2,
+                                  padding: EdgeInsets.only(right: width * 0.05),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      // CNY TEXTVIEW
+                                      Container(
+                                        margin: const EdgeInsets.all(5),
+                                        width: textViewWidth,
+                                        child: TextField(
+                                          textAlign: TextAlign.end,
+                                          enableInteractiveSelection: false,
+                                          controller: cnyController,
+                                          keyboardType:
+                                              TextInputType.numberWithOptions(
+                                                  decimal: true),
+                                          inputFormatters: [
+                                            BlacklistingTextInputFormatter(
+                                              RegExp('[\\-|\\ |\\,]'),
+                                            ),
+                                          ],
+                                          style: TextStyle(
+                                            fontWeight: cnyFontWeight,
+                                            fontSize: textViewFontSize,
+                                            fontFamily: 'Roboto',
+                                            color: Colors.teal,
                                           ),
-                                        ],
-                                        style: TextStyle(
-                                          fontWeight: eurFontWeight,
-                                          fontSize: textViewFontSize,
-                                          fontFamily: 'Roboto',
-                                          color: Colors.teal,
-                                        ),
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          contentPadding: EdgeInsets.only(
-                                              bottom: height * 0.012),
-                                        ),
-                                        onChanged: (input) {
-                                          if (input.isEmpty) {
-                                            setState(() {
-                                              eur = 0.0;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              eur = num.parse(input);
-                                            });
-                                          }
-                                          eur2cny();
-                                          cnyController.text = '$cny';
-                                        },
-                                        onEditingComplete: () {
-                                          if (eur == 0) {
-                                            eurController.text = '0.0';
-                                          }
-                                          eurFontWeight = FontWeight.w300;
-                                          SystemChannels.textInput
-                                              .invokeMethod('TextInput.hide');
-                                        },
-                                        onTap: () {
-                                          if (eur == 0) {
-                                            eurController.text = '';
-                                            cnyController.text = '0.0';
-                                          }
-                                          setState(() {
-                                            eurFontWeight = FontWeight.w400;
+                                          decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            contentPadding: EdgeInsets.only(
+                                                bottom: height * 0.012),
+                                          ),
+                                          onChanged: (input) {
+                                            if (input.isEmpty) {
+                                              setState(() {
+                                                cny = 0.0;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                cny = num.parse(input);
+                                              });
+                                            }
+                                            cny2eur();
+                                            eurController.text = '$eur';
+                                          },
+                                          onEditingComplete: () {
+                                            if (cny == 0) {
+                                              cnyController.text = '0.0';
+                                            }
                                             cnyFontWeight = FontWeight.w300;
-                                          });
-                                        },
+                                            SystemChannels.textInput
+                                                .invokeMethod('TextInput.hide');
+                                          },
+                                          onTap: () {
+                                            setState(() {
+                                              eurFontWeight = FontWeight.w300;
+                                              cnyFontWeight = FontWeight.w400;
+                                            });
+                                            if (cny == 0) {
+                                              eurController.text = '0.0';
+                                              cnyController.text = '';
+                                            }
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                    // € TEXT
-                                    Text(
-                                      '€',
-                                      style: TextStyle(
-                                        fontSize: textViewFontSize,
-                                        fontFamily: 'Roboto',
-                                        color: Colors.black,
-                                        fontWeight: currencyFontWeight,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(height * 0.02),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(right: width * 0.05),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    // CNY TEXTVIEW
-                                    Container(
-                                      margin: const EdgeInsets.all(5),
-                                      width: textViewWidth,
-                                      child: TextField(
-                                        textAlign: TextAlign.end,
-                                        enableInteractiveSelection: false,
-                                        controller: cnyController,
-                                        keyboardType:
-                                            TextInputType.numberWithOptions(
-                                                decimal: true),
-                                        inputFormatters: [
-                                          BlacklistingTextInputFormatter(
-                                            RegExp('[\\-|\\ |\\,]'),
-                                          ),
-                                        ],
+                                      // ¥ TEXT
+                                      Text(
+                                        '¥',
                                         style: TextStyle(
-                                          fontWeight: cnyFontWeight,
                                           fontSize: textViewFontSize,
                                           fontFamily: 'Roboto',
-                                          color: Colors.teal,
+                                          color: Colors.black,
+                                          fontWeight: currencyFontWeight,
                                         ),
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          contentPadding: EdgeInsets.only(
-                                              bottom: height * 0.012),
-                                        ),
-                                        onChanged: (input) {
-                                          if (input.isEmpty) {
-                                            setState(() {
-                                              cny = 0.0;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              cny = num.parse(input);
-                                            });
-                                          }
-                                          cny2eur();
-                                          eurController.text = '$eur';
-                                        },
-                                        onEditingComplete: () {
-                                          if (cny == 0) {
-                                            cnyController.text = '0.0';
-                                          }
-                                          cnyFontWeight = FontWeight.w300;
-                                          SystemChannels.textInput
-                                              .invokeMethod('TextInput.hide');
-                                        },
-                                        onTap: () {
-                                          setState(() {
-                                            eurFontWeight = FontWeight.w300;
-                                            cnyFontWeight = FontWeight.w400;
-                                          });
-                                          if (cny == 0) {
-                                            eurController.text = '0.0';
-                                            cnyController.text = '';
-                                          }
-                                        },
                                       ),
-                                    ),
-                                    // ¥ TEXT
-                                    Text(
-                                      '¥',
-                                      style: TextStyle(
-                                        fontSize: textViewFontSize,
-                                        fontFamily: 'Roboto',
-                                        color: Colors.black,
-                                        fontWeight: currencyFontWeight,
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              )
-                            ],
+                                /*Padding(
+                                  padding: EdgeInsets.all(1),
+                                ),*/
+                                Container(
+                                  padding: EdgeInsets.only(right: width * 0.05),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      // EURO TEXTVIEW
+                                      Container(
+                                        margin: const EdgeInsets.all(5),
+                                        width: textViewWidth,
+                                        child: TextField(
+                                          textAlign: TextAlign.end,
+                                          enableInteractiveSelection: false,
+                                          controller: eurController,
+                                          keyboardType:
+                                              TextInputType.numberWithOptions(
+                                                  decimal: true),
+                                          inputFormatters: [
+                                            BlacklistingTextInputFormatter(
+                                              RegExp('[\\-|\\ |\\,]'),
+                                            ),
+                                          ],
+                                          style: TextStyle(
+                                            fontWeight: eurFontWeight,
+                                            fontSize: textViewFontSize,
+                                            fontFamily: 'Roboto',
+                                            color: Colors.teal,
+                                          ),
+                                          decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            contentPadding: EdgeInsets.only(
+                                                bottom: height * 0.012),
+                                          ),
+                                          onChanged: (input) {
+                                            if (input.isEmpty) {
+                                              setState(() {
+                                                eur = 0.0;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                eur = num.parse(input);
+                                              });
+                                            }
+                                            eur2cny();
+                                            cnyController.text = '$cny';
+                                          },
+                                          onEditingComplete: () {
+                                            if (eur == 0) {
+                                              eurController.text = '0.0';
+                                            }
+                                            eurFontWeight = FontWeight.w300;
+                                            SystemChannels.textInput
+                                                .invokeMethod('TextInput.hide');
+                                          },
+                                          onTap: () {
+                                            if (eur == 0) {
+                                              eurController.text = '';
+                                              cnyController.text = '0.0';
+                                            }
+                                            setState(() {
+                                              eurFontWeight = FontWeight.w400;
+                                              cnyFontWeight = FontWeight.w300;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      // € TEXT
+                                      Text(
+                                        '€',
+                                        style: TextStyle(
+                                          fontSize: textViewFontSize,
+                                          fontFamily: 'Roboto',
+                                          color: Colors.black,
+                                          fontWeight: currencyFontWeight,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Tooltip(
                             message: rateLastUpdatedDateString,
@@ -488,7 +491,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(width * 0.015),
+                  padding: EdgeInsets.all(width * 0.04),
                   child: IconButton(
                     icon: Icon(
                       Icons.settings,
