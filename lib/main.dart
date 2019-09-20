@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:qianalytics/homePage.dart';
-import 'package:qianalytics/firstTimeView.dart';
-import 'package:qianalytics/settingsPage.dart';
+import 'package:qianalytics/homeView.dart';
+import 'package:qianalytics/welcomeView.dart';
+import 'package:qianalytics/settingsView.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(

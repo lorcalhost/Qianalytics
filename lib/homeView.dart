@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qianalytics/Constants.dart';
+import 'package:qianalytics/singninWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -17,6 +18,7 @@ class MyHomePage extends StatefulWidget {
 String username = '';
 double rate = 0.0;
 String rateLastUpdatedDateString = '';
+String sheetslast = '';
 
 class _MyHomePageState extends State<MyHomePage> {
   final formKey = GlobalKey<FormState>();
@@ -52,9 +54,11 @@ class _MyHomePageState extends State<MyHomePage> {
     if (isFirstTime == true) {
       prefs.setDouble('rate', 7.63);
       prefs.setString('rateLastUpdatedDateString', 'Last updated: never');
+      prefs.setString('sheets', 'None'); // ONE HERE
       Navigator.of(context).pushNamed('/welcome');
     } else {
       updateUserName();
+      updateSheet();
       getRate();
       updateRate();
       eurController.text = '0.0';
@@ -74,6 +78,12 @@ class _MyHomePageState extends State<MyHomePage> {
     String s = prefs.getString('rateLastUpdatedDateString');
     setState(() => rate = r);
     setState(() => rateLastUpdatedDateString = s);
+  }
+
+  updateSheet() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String s = prefs.getString('sheets');
+    setState(() => sheetslast = s);
   }
 
   getRate() async {
@@ -378,7 +388,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
                                   Card(
-                                    elevation: 0.5,
+                                    elevation: 1.5,
                                     child: Column(
                                       children: <Widget>[
                                         Padding(
@@ -474,9 +484,31 @@ class _MyHomePageState extends State<MyHomePage> {
                     Stack(
                       children: <Widget>[
                         Center(
-                          child: Text(
+                          child:
+                              /*Column(
+                            children: <Widget>[
+                              gSignin.signinButton(),
+                              GestureDetector(
+                                onTap: () {
+                                  updateSheet();
+                                },
+                                child: Container(
+                                  height: 200,
+                                  width: 200,
+                                  color: Colors.yellow,
+                                  child: Text('hello $sheetslast'),
+                                ),
+                              ),
+                            ],
+                          ),*/
+                              Text(
                             'Coming soon',
-                            style: TextStyle(fontSize: height * 0.05),
+                            style: TextStyle(
+                              fontSize: height * 0.05,
+                              fontFamily: 'Roboto',
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ],
